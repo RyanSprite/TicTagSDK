@@ -12,7 +12,7 @@ s.authors      = { 'Ryan' => '306001701@qq.com' }
 
 s.summary      = 'A iOS framework.'  
 
-s.source       = { :git => 'https://github.com/RyanSprite/TicTagSDK.git', :tag => "{s.version}" }
+s.source       = { :git => 'https://github.com/RyanSprite/TicTagSDK.git', :tag => "#{s.version}" }
 s.platform     = :ios, '8.0'
 
 s.source_files = 'TicTagSDK.framework/Headers/*.{h}'
@@ -21,8 +21,14 @@ s.vendored_frameworks = 'TicTagSDK.framework'
 
 s.public_header_files = 'TicTagSDK.framework/Headers/TicTagSDK.h'
 
-s.libraries    = 'sqlite3','icucore','z'
+s.libraries    = 'sqlite3','icucore','z','libstdc++.tbd'
 
 s.frameworks   = 'UIKit','Foundation','CoreLocation'
+
+s.dependency "AFNetworking"
+
+s.dependency "MQTTClient"
+
+s.dependency "SSZipArchive"
 
 end

@@ -8,13 +8,35 @@
 
 #import <Foundation/Foundation.h>
 #import <CoreBluetooth/CoreBluetooth.h>
-
+#import <CoreLocation/CoreLocation.h>
+#import <UIKit/UIKit.h>
+#define FWUPDATE @"HBFWUPDATE"
+#define HWUPDATE @"HBHWUPDATE"
+typedef void(^gpsCollectBlock)(NSString* nowtime,CGFloat longitude,CGFloat latitude);
+typedef void(^iBeaconBlock)(NSString * electric,NSString *clickTimes);
 typedef void(^successBlock)(void);
 typedef void (^failBlock)(void);
+typedef void(^disBindBlock)(void);
+typedef void(^userAlertBlock)(NSString *clickTimes);
+
 @interface TTBlueToothManager : NSObject
 
-@property (nonatomic,strong) successBlock bindSuccessBlock;
-@property (nonatomic,strong) failBlock bindFailBlock;
+@property (nonatomic,copy) successBlock bindSuccessBlock;
+@property (nonatomic,copy) failBlock bindFailBlock;
+@property (nonatomic,copy) iBeaconBlock iBeaconblock;
+@property (nonatomic,copy) disBindBlock disBindBlock;
+@property (nonatomic,copy) userAlertBlock userAlertBlock;
+@property (nonatomic,copy) gpsCollectBlock gpsCollectBlock;
+
+/**
+ Current device name
+ */
+@property (nonatomic,readonly) NSString *name;
+
+/**
+ Current device UUID
+ */
+@property (nonatomic,readonly) NSString *uuid;
 
 
 /**
@@ -27,6 +49,22 @@ typedef void (^failBlock)(void);
  */
 @property (nonatomic,readonly) NSString *clickTimes;
 
+
+/**
+ Current  TicTag hardwareVersion IP type
+ */
+@property (nonatomic,readonly) NSString *hardwareVersion;
+
+
+/**
+ Current  TicTag firmwareVersion IP type
+ */
+@property (nonatomic,readonly) NSString *firmwareVersion;
+
+/**
+ Current  TicTag info
+ */
+@property (nonatomic,readonly) CBPeripheral *currentPeripheral;
 /**
  powerSavingMode Can save you a lot of electricity ,default is 1,if you want to close it,please set 0
  */
@@ -49,6 +87,30 @@ typedef void (^failBlock)(void);
                        withSuccessBlock:(successBlock)successBlock
                       andFailure:(failBlock)failBlock;
 
-- (void)disBindTicTag;
+/**
+ 获取TicTag的电量和按键次数 block |  when bind TicTag
+ */
+- (void)getiBeaconInfo:(void (^)(NSString* electric,NSString* clickTimes))iBeaconblock;
+
+/**
+ TicTag 解绑 |  when disbind TicTag
+ */
+- (BOOL)disBindTicTag;
+
+/**
+ TicTag 解绑回调 block |  when disbind TicTag
+ */
+- (void)ticTagDisBind:(disBindBlock)disbindBlock;
+
+/**
+  TicTag 用户报警block |  when bind TicTag
+ */
+- (void)receiveUserAlert:(userAlertBlock)userAlertBlock;
+
+/**
+ TicTag GPS 回调 block |  when bind TicTag
+ */
+- (void)receiveGPSBlock:(gpsCollectBlock)gpsBlock;
+
 
 @end
