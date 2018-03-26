@@ -21,7 +21,7 @@ s.vendored_frameworks = 'TicTagSDK.framework'
 
 s.public_header_files = 'TicTagSDK.framework/Headers/TicTagSDK.h'
 
-s.libraries    = 'sqlite3','icucore','z','libstdc++.tbd'
+s.libraries    = 'sqlite3','icucore','z'
 
 s.frameworks   = 'UIKit','Foundation','CoreLocation'
 
@@ -30,5 +30,6 @@ s.dependency "AFNetworking"
 s.dependency "MQTTClient"
 
 s.dependency "SSZipArchive"
+s.dependency "AliyunSlsObjc"
 
 end
