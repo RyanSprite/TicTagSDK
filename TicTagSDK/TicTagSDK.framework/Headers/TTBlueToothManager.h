@@ -10,14 +10,7 @@
 #import <CoreBluetooth/CoreBluetooth.h>
 #import <CoreLocation/CoreLocation.h>
 #import <UIKit/UIKit.h>
-#define FWUPDATE @"HBFWUPDATE"
-#define HWUPDATE @"HBHWUPDATE"
-typedef void(^gpsCollectBlock)(NSString* nowtime,CGFloat longitude,CGFloat latitude);
-typedef void(^iBeaconBlock)(NSString * electric,NSString *clickTimes);
-typedef void(^successBlock)(void);
-typedef void (^failBlock)(void);
-typedef void(^disBindBlock)(void);
-typedef void(^userAlertBlock)(NSString *clickTimes);
+#import "TTDefines.h"
 
 @interface TTBlueToothManager : NSObject
 
@@ -27,6 +20,19 @@ typedef void(^userAlertBlock)(NSString *clickTimes);
 @property (nonatomic,copy) disBindBlock disBindBlock;
 @property (nonatomic,copy) userAlertBlock userAlertBlock;
 @property (nonatomic,copy) gpsCollectBlock gpsCollectBlock;
+@property (nonatomic,copy) changeState changeState;
+
+
+
+/**
+ Current device isBind
+ */
+@property (nonatomic,readonly) BOOL isBind;
+
+/**
+ iphone bluetooth is power on
+ */
+@property (nonatomic,readonly) BOOL isPowerOn;
 
 /**
  Current device name
@@ -38,6 +44,10 @@ typedef void(^userAlertBlock)(NSString *clickTimes);
  */
 @property (nonatomic,readonly) NSString *uuid;
 
+/**
+ Current device Bind time
+ */
+@property (nonatomic,readonly) NSString *bindTime;
 
 /**
  Current device power Range:0~100%
@@ -65,6 +75,22 @@ typedef void(^userAlertBlock)(NSString *clickTimes);
  Current  TicTag info
  */
 @property (nonatomic,readonly) CBPeripheral *currentPeripheral;
+
+/**
+ Current  TicTag state
+ */
+@property (nonatomic,readonly) TicTagState ticTagState;
+
+/**
+ nearCarTimeout info
+ */
+@property (nonatomic,assign) int nearCarTimeout;
+
+/**
+ nearCarTimeout info
+ */
+@property (nonatomic,assign) int gpsUploadInterval;
+
 /**
  powerSavingMode Can save you a lot of electricity ,default is 1,if you want to close it,please set 0
  */
@@ -80,6 +106,13 @@ typedef void(^userAlertBlock)(NSString *clickTimes);
  */
 - (void)startSearchTicTagWithBlock:(void (^)(CBCentralManager *central,CBPeripheral *peripheral,NSDictionary *advertisementData, NSNumber *RSSI))block;
 
+
+
+/**
+ 停止搜索TicTag |  when find TicTag
+ */
+- (void)stopSearchTicTag;
+
 /**
  绑定指定TicTag的block |  when bind TicTag
  */
@@ -93,12 +126,12 @@ typedef void(^userAlertBlock)(NSString *clickTimes);
 - (void)getiBeaconInfo:(void (^)(NSString* electric,NSString* clickTimes))iBeaconblock;
 
 /**
- TicTag 解绑 |  when disbind TicTag
+ TicTag APP主动解绑 |  when disbind TicTag
  */
 - (BOOL)disBindTicTag;
 
 /**
- TicTag 解绑回调 block |  when disbind TicTag
+ TicTag 设备主动解绑回调 block |  when disbind TicTag
  */
 - (void)ticTagDisBind:(disBindBlock)disbindBlock;
 
@@ -111,6 +144,11 @@ typedef void(^userAlertBlock)(NSString *clickTimes);
  TicTag GPS 回调 block |  when bind TicTag
  */
 - (void)receiveGPSBlock:(gpsCollectBlock)gpsBlock;
+
+/**
+ TicTag StateChange 回调 block |  when bind TicTag
+ */
+- (void)stateChanged:(changeState)changeBlock;
 
 
 @end
